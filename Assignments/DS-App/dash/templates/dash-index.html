@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+
+{% block head %}
+{% if reload %}
+<script>
+  setTimeout(() => {window.location = "/"}, 3000)
+</script>
+{% endif %}
+{% endblock %}
+
+{% block content %}
+<main class="grid grid-cols-2 grid-rows-2 max-w-4/5 h-screen m-auto gap-4 py-4">
+  <section class="w-full h-full bg-amber-200 p-4">
+    <h2 class="text-xl">Upload files</h2>
+
+    <form action="/upload" method="post" class="p-1 border border-black" enctype="multipart/form-data">
+      {% csrf_token %}
+
+      {{ upload_form.non_field_errors }}
+
+      <div class="p-1">
+        {% if upload_form.file.errors %}
+        <div class="border-4 border-red-500 p-0.5 my-1">
+          {{ upload_form.file.errors }}
+        </div>
+        {% endif %}
+        
+        <button class="bg-blue-500 hover:bg-blue-600 text-white py-1 px-2 rounded-lg">
+          {{ upload_form.file }}
+        </button>
+
+        <span class="text-white">{{ upload_form.file.help_text }}</span>
+      </div>
+
+      <input type="submit" value="Submit" class="bg-green-300 hover:bg-green-400 text-black m-1 py-1 px-2 rounded-lg">
+      {% if upload_complete %}
+        <span>Upload complete: {{ uploaded_file }}</span>
+      {% endif %}
+    </form>
+    
+  </section>
+
+  <section class="w-full h-full bg-red-200 p-4">
+    <h2 class="text-xl">Process files</h2>
+    <div class="flex flex-col gap-2">
+      {% for file in files_to_process %}
+
+      <span class="flex flex-row">
+        {% if file.state == "DO" %}✅{% else %}🚧{% endif %} {{ file.file }}
+        <a href="/process?pk={{ file.pk }}">➡️</a>
+        <a href="/delete?pk={{ file.pk }}">🗑️</a>
+      </span>
+      {% endfor %}
+    </div>
+  </section>
+
+  <section class="w-full h-full bg-red-200 p-4">
+    <h2 class="text-xl">TODO</h2>
+  </section>
+
+  <section class="w-full h-full bg-amber-200 p-4">
+    <h2 class="text-xl">TODO</h2>
+  </section>
+
+</main>
+{% endblock %}

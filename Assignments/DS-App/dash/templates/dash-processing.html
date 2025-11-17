@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block head %}
+{% if upload.state != "DO" %}
+<script type="module">
+  setTimeout(() => {
+    window.location.reload()
+  }, 2000);
+</script>
+{% endif %}
+{% endblock %}
+
+{% block content %}
+<main class="max-w-4/5 h-screen m-auto py-4">
+  <section class="bg-amber-200 flex flex-col h-full p-2">
+    <h1 class="text-xl">Processing file {{ upload.pk }} ({{ upload.file }})</h1>
+
+    <ul class="font-mono flex flex-col">
+      <li class="flex flex-row"><span class="w-24 block">- Uploaded</span><span>{% if upload.state == "UP" %}⬅️{% endif %}</span></li>
+      <li class="flex flex-row"><span class="w-24 block">- Started </span><span>{% if upload.state == "ST" %}⬅️{% endif %}</span></li>
+      <li class="flex flex-row"><span class="w-24 block">- Stage 1 </span><span>{% if upload.state == "P1" %}⬅️{% endif %}</span></li>
+      <li class="flex flex-row"><span class="w-24 block">- Stage 2 </span><span>{% if upload.state == "P2" %}⬅️{% endif %}</span></li>
+      <li class="flex flex-row"><span class="w-24 block">- Done    </span><span>{% if upload.state == "DO" %}⬅️{% endif %}</span></li>
+    </ul>
+  </section>
+</main>
+{% endblock %}
